@@ -81,3 +81,8 @@ class ContactRepository:
             await self.db.delete(contact)
             await self.db.commit()
         return contact
+
+    async def get_contact_by_email(self, email: str):
+        stmt = select(Contact).filter_by(email=email)
+        result = await self.db.execute(stmt)
+        return result.scalar_one_or_none()

@@ -4,7 +4,7 @@ from fastapi import APIRouter, HTTPException, Depends, status, Query
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.database.db import get_db
-from src.schemas import ContactModel, ContactResponse
+from src.schemas import ContactModel, ContactResponse, ContactUpdate
 from src.services.contacts import ContactService
 
 router = APIRouter(prefix="/contacts", tags=["contacts"])
@@ -41,7 +41,6 @@ async def read_upcoming_birthdays(db: AsyncSession = Depends(get_db)):
 async def read_contact(contact_id: int, db: AsyncSession = Depends(get_db)):
     contact_service = ContactService(db)
     contact = await contact_service.get_contact(contact_id)
-    print(contact)
     if contact is None:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND, detail="Contact not found"
@@ -57,7 +56,7 @@ async def create_contact(body: ContactModel, db: AsyncSession = Depends(get_db))
 
 @router.patch("/{contact_id}", response_model=ContactResponse)
 async def update_contact(
-    body: ContactModel, contact_id: int, db: AsyncSession = Depends(get_db)
+    body: ContactUpdate, contact_id: int, db: AsyncSession = Depends(get_db)
 ):
     contact_service = ContactService(db)
     contact = await contact_service.update_contact(contact_id, body)

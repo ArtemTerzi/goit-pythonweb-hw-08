@@ -6,9 +6,10 @@ from pydantic import BaseModel, Field, ConfigDict, EmailStr
 class ContactModel(BaseModel):
     first_name: str = Field(..., min_length=3, max_length=50)
     last_name: str = Field(..., min_length=3, max_length=50)
-    email: EmailStr | None = Field(None, max_length=50)
-    phone_number: str | None = Field(None, max_length=20)
-    birthday: date | None = None
+    email: EmailStr = Field(..., max_length=50)
+    phone_number: str = Field(..., max_length=20)
+    birthday: date
+    description: str | None = Field(None, max_length=250)
 
 
 class ContactResponse(ContactModel):
@@ -25,3 +26,4 @@ class ContactUpdate(BaseModel):
     email: EmailStr | None = Field(None, max_length=50)
     phone_number: str | None = Field(None, max_length=20)
     birthday: date | None = None
+    description: str | None = Field(None, max_length=250)
